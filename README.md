@@ -183,7 +183,7 @@ To use **jsonlib** in your project:
 
 ## API Overview
 
-### json Class
+### `json` Class
 
 - `json(const std::string& file_path)`: Reads and parses a JSON file.
 
