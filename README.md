@@ -181,7 +181,7 @@ To use **jsonlib** in your project:
    g++ -std=c++17 main.cpp -I/path/to/json_project/include -L/path/to/json_project/build -ljsonlib -o my_program
 ```
 
-## API Overview
+## 🧰 API Overview
 
 ### `json` Class
 
@@ -234,7 +234,7 @@ Contributions are welcome! To contribute:
 
 - Create a LICENSE file (e.g., MIT License) for the project.
 
-## License
+## 📄 License
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT). See the `LICENSE` file for details.
 
