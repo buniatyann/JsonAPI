@@ -234,6 +234,6 @@ Contributions are welcome! To contribute:
 
 - Create a LICENSE file (e.g., MIT License) for the project.
 
-## 📄 License
+## License
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT). See the `LICENSE` file for details.
