@@ -6,7 +6,7 @@ Supports intuitive operations like `obj["age"][2] = false`, robust error handlin
 
 ---
 
-## 📖 Overview
+## Overview
 
 This is a **C++17 static library** (`jsonlib`) for working with JSON files. It provides functionality to:
 
@@ -18,7 +18,7 @@ The library supports intuitive chained indexing (e.g., `obj["age"][2] = false`) 
 
 ---
 
-## ✨ Features
+## Features
 
 - **Parse JSON:** Read and parse JSON files into a hierarchical data structure.
 - **Manipulate JSON:** Modify data using intuitive syntax: `obj["age"][2] = false`, `obj["name"] = "gago"`.
@@ -30,7 +30,7 @@ The library supports intuitive chained indexing (e.g., `obj["age"][2] = false`) 
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```text
 json_project/
@@ -57,7 +57,7 @@ json_project/
 ├── CMakeLists.txt
 └── README.md
 ```
-## 📁 Project Structure
+## Project Structure
 
 - **`include/`**  
   Contains header files for the JSON library classes:
@@ -80,9 +80,9 @@ json_project/
 - **`README.md`**  
   Project documentation and usage instructions.
 
-## ⚙️ Installation
+## Installation
 
-### 📋 Prerequisites
+### Prerequisites
 
 - CMake **3.10** or higher  
 - A **C++17-compatible compiler** (e.g., GCC, Clang, MSVC)  
@@ -104,9 +104,9 @@ json_project/
 3. **Build the static library**:
    ```plain
    make
-4. 🔧 The static library **`libjsonlib.a`** will be generated in the `build/` directory.
+4. The static library **`libjsonlib.a`** will be generated in the `build/` directory.
 
-### 📦 Installation (Optional)
+### Installation (Optional)
 
 To install the library and headers system-wide (e.g., to `/usr/local`):
 ```bash
@@ -114,7 +114,7 @@ To install the library and headers system-wide (e.g., to `/usr/local`):
 ```
 (Note: The provided CMakeLists.txt does not include an install target. See "Contributing" for adding one.)
 
-### 🚀 Usage
+### Usage
 
 The library provides a `json` class for file I/O and a hierarchy of classes (`json_object`, `json_array`, etc.) for manipulating JSON data. Below is an example of reading, modifying, and writing a JSON file.
 
@@ -181,7 +181,7 @@ To use **jsonlib** in your project:
    g++ -std=c++17 main.cpp -I/path/to/json_project/include -L/path/to/json_project/build -ljsonlib -o my_program
 ```
 
-## 🧰 API Overview
+## API Overview
 
 ### `json` Class
 
