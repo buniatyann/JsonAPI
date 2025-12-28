@@ -17,6 +17,7 @@ Supports intuitive operations like `obj["age"][2] = false`, implicit type conver
 - **Comparison:** `operator==` and `operator!=` for all JSON types
 - **Type Safety:** Strong runtime type checking with `is_*()` and `as_*()` methods
 - **No Dependencies:** Uses only the C++ standard library
+- **Single Header Include:** Just `#include "json.hpp"` to access everything
 
 ---
 
@@ -25,9 +26,9 @@ Supports intuitive operations like `obj["age"][2] = false`, implicit type conver
 ```
 JsonAPI/
 ├── include/
-│   ├── json.hpp              # Main API entry point
+│   ├── json.hpp              # Main API entry point (includes all types)
 │   ├── types/                # JSON value type classes
-│   │   ├── json_value.hpp
+│   │   ├── json_value.hpp    # Core value type using std::variant (PIMPL)
 │   │   ├── json_null.hpp
 │   │   ├── json_boolean.hpp
 │   │   ├── json_number.hpp
@@ -80,6 +81,8 @@ json file_data("input.json");
 ### Creating JSON
 
 ```cpp
+#include "json.hpp"
+
 // Create empty containers
 json obj = json::object();
 json arr = json::array();
@@ -105,8 +108,8 @@ int age_int = obj["age"];        // 30
 bool active = obj["active"];     // true
 
 // Explicit type checking
-if (obj["name"].is_string()) {
-    std::string value = obj["name"].as_string().get_value();
+if (obj["name"].as_value().is_string()) {
+    std::string value = obj["name"].as_value().as_string().get_value();
 }
 ```
 
@@ -116,8 +119,8 @@ if (obj["name"].is_string()) {
 json arr_json = json::array();
 json_array& arr = arr_json.get_json().as_array();
 
-arr.push_back(std::make_unique<json_number>(1));
-arr.push_back(std::make_unique<json_number>(2));
+arr.push_back(json_value(1));
+arr.push_back(json_value(2));
 arr[5] = 10;  // Auto-resizes, fills with null
 
 std::cout << arr.size() << std::endl;  // 6
@@ -130,13 +133,13 @@ std::cout << arr.empty() << std::endl; // false
 // Iterate over array
 json_array& arr = data.get_json().as_array();
 for (const auto& elem : arr) {
-    std::cout << elem->dump() << std::endl;
+    std::cout << elem.dump() << std::endl;
 }
 
 // Iterate over object
 json_object& obj = data.get_json().as_object();
 for (const auto& [key, value] : obj) {
-    std::cout << key << std::endl;
+    std::cout << key << ": " << value.dump() << std::endl;
 }
 ```
 
@@ -188,6 +191,24 @@ data.write_file("output.json", 2);
 | `std::string get_context(int indent = -1)` | Serialize to string |
 | `void write_file(const std::string& path, int indent = 2)` | Write to file |
 
+### `json_value` Class
+
+| Method | Description |
+|--------|-------------|
+| `json_value()` | Default constructor (null) |
+| `json_value(bool)` | Construct boolean value |
+| `json_value(int)` / `json_value(double)` | Construct number value |
+| `json_value(const char*)` / `json_value(const std::string&)` | Construct string value |
+| `json_value(std::nullptr_t)` | Construct null value |
+| `static json_value make_array()` | Create empty array value |
+| `static json_value make_object()` | Create empty object value |
+| `type()` | Get `json_type` enum |
+| `is_null()`, `is_boolean()`, `is_number()`, `is_string()`, `is_array()`, `is_object()` | Type checking |
+| `as_null()`, `as_boolean()`, `as_number()`, `as_string()`, `as_array()`, `as_object()` | Type casting (throws on mismatch) |
+| `dump(int indent = -1)` | Serialize to string |
+| `clone()` | Deep copy |
+| `operator==` / `operator!=` | Value comparison |
+
 ### `json_object` Class
 
 | Method | Description |
@@ -208,26 +229,26 @@ data.write_file("output.json", 2);
 | `size()` | Number of elements |
 | `empty()` | Check if empty |
 | `clear()` | Remove all elements |
-| `push_back(std::unique_ptr<json_value>)` | Add element |
+| `push_back(json_value)` | Add element |
 | `begin()` / `end()` | Iterators for range-for |
 
-### Type Methods (all `json_value` types)
+---
 
-| Method | Description |
-|--------|-------------|
-| `type()` | Get `json_type` enum |
-| `is_null()`, `is_boolean()`, etc. | Type checking |
-| `as_null()`, `as_boolean()`, etc. | Type casting (throws on mismatch) |
-| `dump(int indent)` | Serialize to string |
-| `clone()` | Deep copy |
-| `operator==` / `operator!=` | Value comparison |
+## Architecture
+
+The library uses a **value-based design** with `std::variant` internally:
+
+- `json_value` is the core type that can hold any JSON value
+- Uses the **PIMPL idiom** to hide implementation details and reduce compile times
+- All JSON types (`json_null`, `json_boolean`, `json_number`, `json_string`, `json_array`, `json_object`) are standalone classes
+- The variant is stored internally: `std::variant<std::monostate, json_null, json_boolean, json_number, json_string, std::unique_ptr<json_array>, std::unique_ptr<json_object>>`
 
 ---
 
 ## Linking
 
 ```bash
-g++ -std=c++17 main.cpp -I/path/to/Json/include -L/path/to/Json/build -ljsonlib -o my_program
+g++ -std=c++17 main.cpp -I/path/to/JsonAPI/include -L/path/to/JsonAPI/build -ljsonlib -o my_program
 ```
 
 ---
