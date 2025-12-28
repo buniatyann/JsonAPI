@@ -2,6 +2,12 @@
 #define JSON_API_HPP
 
 #include "types/json_value.hpp"
+#include "types/json_null.hpp"
+#include "types/json_boolean.hpp"
+#include "types/json_number.hpp"
+#include "types/json_string.hpp"
+#include "types/json_array.hpp"
+#include "types/json_object.hpp"
 #include <string>
 
 class json {
